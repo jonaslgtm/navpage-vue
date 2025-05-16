@@ -1,0 +1,255 @@
+/* 导航页面样式 */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px 20px;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h1 {
+  color: #333;
+  font-size: 24px;
+}
+
+.date-info {
+  background-color: #ff6b6b;
+  color: white;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.date-day {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.category-nav {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.category-item {
+  padding: 8px 15px;
+  background-color: #f0f0f0;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 14px;
+  color: #333;
+}
+
+.category-item:hover {
+  background-color: #e0e0e0;
+  transform: translateY(-2px);
+}
+
+.category-item.active {
+  background-color: #4a89dc;
+  color: white;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+}
+
+.grid-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 15px 10px;
+  background-color: white;
+  border-radius: 10px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.grid-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.grid-item img {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.grid-item span {
+  font-size: 14px;
+  color: #333;
+}
+
+.trending {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  padding: 15px;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.trending h3 {
+  color: #333;
+  margin-bottom: 10px;
+  font-size: 18px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.trending h3::before {
+  content: '🔥';
+  margin-right: 8px;
+}
+
+.trending-list {
+  list-style-type: none;
+}
+
+.trending-list li {
+  padding: 10px 0;
+  border-bottom: 1px dashed #eee;
+  display: flex;
+  align-items: center;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.trending-list li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  /* justify-content: space-between; */ /* 已移除，恢复左对齐 */
+}
+
+.trending-list li:hover {
+  background-color: rgba(255, 255, 255, 0.5);
+  padding-left: 5px;
+}
+
+.trending-list li:last-child {
+  border-bottom: none;
+}
+
+.trending-list li span {
+  background-color: #f0f0f0;
+  color: #999;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+
+/* 前三名特殊样式 */
+.trending-list li span.top-1 {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.trending-list li span.top-2 {
+  background-color: #ff7a45;
+  color: white;
+}
+
+.trending-list li span.top-3 {
+  background-color: #ffa940;
+  color: white;
+}
+
+.hot-count {
+  font-size: 0.8em;
+  color: #999;
+  margin-left: auto; /* 修改为auto以实现右对齐 */
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* 前三名热搜数量特殊样式 */
+.trending-list li a span.top-1 ~ .hot-count {
+  background-color: #ff4d4f;
+  color: white;
+}
+
+.trending-list li a span.top-2 ~ .hot-count {
+  background-color: #ff7a45;
+  color: white;
+}
+
+.trending-list li a span.top-3 ~ .hot-count {
+  background-color: #ffa940;
+  color: white;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .date-info {
+    margin-top: 10px;
+    align-self: flex-end;
+  }
+  
+  .category-nav {
+    flex-wrap: wrap;
+  }
+  
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-container {
+    grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+    gap: 10px;
+    padding: 10px;
+  }
+  
+  .grid-item img {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .grid-item span {
+    font-size: 12px;
+  }
+}

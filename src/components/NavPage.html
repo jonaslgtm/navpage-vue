@@ -1,0 +1,53 @@
+<div class="container">
+    <div class="header">
+      <h1>网站导航</h1>
+      <div class="date-info">
+        <div class="date-day">{{ day }}</div>
+        <div>{{ weekday }}</div>
+        <div>{{ year }}年{{ month }}月</div>
+      </div>
+    </div>
+    
+    <div class="category-nav">
+      <div 
+        v-for="category in categories" 
+        :key="category.id"
+        class="category-item"
+        :class="{ active: activeCategory === category.id }"
+        @click="changeCategory(category.id)"
+      >
+        {{ category.name }}
+      </div>
+    </div>
+    
+    <div class="grid-container">
+      <a 
+        v-for="site in filteredWebsites" 
+        :key="site.name"
+        :href="site.url" 
+        class="grid-item"
+        :data-category="site.category"
+        target="_blank"
+      >
+        <img :src="site.img" :alt="site.name">
+        <span>{{ site.name }}</span>
+      </a>
+    </div>
+    
+    <div class="trending">
+      <h3>热搜榜</h3>
+      <ul class="trending-list">
+        <li v-if="trendingLoading">加载中...</li>
+        <li v-if="trendingError">{{ trendingError }}</li>
+        <template v-if="!trendingLoading && !trendingError">
+          <li v-for="(item, index) in trendingItems" :key="item.title">
+            <a :href="item.url" target="_blank">
+              <span :class="{ 'top-1': index === 0, 'top-2': index === 1, 'top-3': index === 2 }">{{ index + 1 }}</span>
+              {{ item.title }}
+              <small v-if="item.hot" class="hot-count">{{ item.hot }}</small>
+            </a>
+          </li>
+        </template>
+      </ul>
+    </div>
+  </div>
