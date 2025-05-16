@@ -7,5 +7,5 @@ import NavPage from './components/NavPage.vue'
 </template>
 
 <style>
-/* 全局样式在style.css中定义 */
+/* 全局样式在style.css中定义1 */
 </style>
