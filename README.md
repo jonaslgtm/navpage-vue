@@ -2,7 +2,7 @@
 
 这是一个基于 Vue.js 构建的导航页面项目。
 
-后台管理地址：<https://github.com/jonaslgtm/navpage-admin>
+后台管理系统地址：<https://github.com/jonaslgtm/navpage-admin>
 
 ## 功能特性
 
