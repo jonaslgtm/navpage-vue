@@ -2,6 +2,8 @@
 
 这是一个基于 Vue.js 构建的导航页面项目。
 
+后台管理地址：<https://github.com/jonaslgtm/navpage-admin>
+
 ## 功能特性
 
 *   **分类导航**：将不同类型的网站进行分类展示，方便用户快速找到所需站点。
