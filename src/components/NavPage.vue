@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
 // API URL（根据您的实际部署情况修改）
-const API_URL = 'http://localhost:8000/api.php';
+const API_URL = 'https://navpage.web025.cn/api.php';
 
 // 网站数据和分类数据
 const websites = ref([]);
