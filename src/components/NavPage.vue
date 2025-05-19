@@ -1,36 +1,12 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
-// 网站数据
-const websites = [
-  // 科技类
-  { name: 'Apple', url: 'https://www.apple.com/cn/', category: 'tech', img: 'https://www.apple.com/ac/globalnav/7/zh_CN/images/be15095f-5a20-57d0-ad14-cf4c638e223a/globalnav_apple_image__b5er5ngrzxqq_large.svg' },
-  { name: 'iCloud', url: 'https://www.icloud.com/', category: 'tech', img: 'https://www.apple.com/v/icloud/b/images/overview/icloud_icon__er1ur1j3rys2_large_2x.png' },
-  { name: 'GitHub', url: 'https://github.com/', category: 'tech', img: 'https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png' },
-  { name: 'DeepSeek', url: 'https://www.deepseek.com/', category: 'tech', img: 'https://www.deepseek.com/images/logo.svg' },
-  
-  // 社交类
-  { name: 'Instagram', url: 'https://www.instagram.com/', category: 'social', img: 'https://static.cdninstagram.com/rsrc.php/v3/yt/r/30PrGfR3xhB.png' },
-  { name: '抖音', url: 'https://www.douyin.com/', category: 'social', img: 'https://lf1-cdn-tos.bytegoofy.com/goofy/ies/douyin_web/public/favicon.ico' },
-  
-  // 资讯类
-  { name: '央视视频', url: 'https://tv.cctv.com/', category: 'news', img: 'https://p1.img.cctvpic.com/photoAlbum/templet/common/DEPA1452928658061849/cctv_logo_20161128.png' },
-  { name: 'YouTube', url: 'https://www.youtube.com/', category: 'news', img: 'https://www.youtube.com/s/desktop/e4d15d2c/img/favicon_144x144.png' },
-  { name: '知乎', url: 'https://www.zhihu.com/', category: 'news', img: 'https://static.zhihu.com/heifetz/favicon.ico' },
-  { name: '微博', url: 'https://weibo.com/', category: 'news', img: 'https://weibo.com/favicon.ico' },
-  { name: '鸟类', url: 'https://www.niaolei.org.cn/', category: 'news', img: 'https://www.niaolei.org.cn/favicon.ico' },
-  
-  // 工具类
-  { name: '微信公众平台', url: 'https://work.weixin.qq.com/', category: 'tools', img: 'https://res.wx.qq.com/a/wx_fed/assets/res/OTE0YTAw.png' },
-  { name: '百度翻译', url: 'https://fanyi.baidu.com/', category: 'tools', img: 'https://fanyi-cdn.cdn.bcebos.com/static/translation/img/favicon/favicon-32x32_ca689c3.png' },
-  { name: '腾讯翻译', url: 'https://fanyi.qq.com/', category: 'tools', img: 'https://fanyi.qq.com/favicon.ico' },
-  { name: '石墨', url: 'https://www.shimo.im/', category: 'tools', img: 'https://assets.shimonote.com/favicon.ico' },
-  { name: '天眼查', url: 'https://www.tianyancha.com/', category: 'tools', img: 'https://static.tianyancha.com/wap-static/images/favicon.ico' },
-  
-  // 购物类
-  { name: '小红书', url: 'https://www.xiaohongshu.com/', category: 'shopping', img: 'https://ci.xiaohongshu.com/favicon.ico' },
-  { name: '京东购物', url: 'https://www.jd.com/', category: 'shopping', img: 'https://www.jd.com/favicon.ico' },
-];
+// API URL（根据您的实际部署情况修改）
+const API_URL = 'http://localhost:8000/api.php';
+
+// 网站数据和分类数据
+const websites = ref([]);
+
 
 // 热搜榜数据
 const trendingItems = ref([]);
@@ -73,6 +49,7 @@ async function fetchTrendingData() {
 }
 
 onMounted(() => {
+  fetchData();
   fetchTrendingData();
   trendingInterval = setInterval(fetchTrendingData, 10 * 60 * 1000); // 每10分钟刷新一次
 });
@@ -84,14 +61,32 @@ onUnmounted(() => {
 });
 
 // 分类数据
-const categories = [
-  { id: 'all', name: '全部' },
-  { id: 'news', name: '资讯' },
-  { id: 'tech', name: '科技' },
-  { id: 'tools', name: '工具' },
-  { id: 'social', name: '社交' },
-  { id: 'shopping', name: '购物' },
-];
+const categories = ref([
+  { id: 'all', name: '全部' }
+]);
+
+// 获取所有数据
+async function fetchData() {
+  try {
+    const response = await fetch(`${API_URL}?action=get_all_data`);
+    if (!response.ok) {
+      throw new Error('API请求失败');
+    }
+    const data = await response.json();
+    if (data.code === 1 && data.data) {
+      websites.value = data.data.websites;
+      
+      // 转换分类数据格式
+      categories.value = [
+        { id: 'all', name: '全部' },
+        ...data.data.categories.filter(cat => cat.identifier !== 'all')
+          .map(cat => ({ id: cat.identifier, name: cat.name }))
+      ];
+    }
+  } catch (error) {
+    console.error('获取数据失败:', error);
+  }
+}
 
 // 响应式数据
 const currentDate = new Date();
@@ -106,9 +101,9 @@ const activeCategory = ref('all');
 // 根据当前分类过滤网站
 const filteredWebsites = computed(() => {
   if (activeCategory.value === 'all') {
-    return websites;
+    return websites.value;
   }
-  return websites.filter(site => site.category === activeCategory.value);
+  return websites.value.filter(site => site.category === activeCategory.value);
 });
 
 // 切换分类方法
