@@ -4,7 +4,7 @@
  */
 
 // API URL配置
-const API_URL = 'https://navpage.web025.cn/api.php';
+const API_URL = 'http://localhost:8000/api.php';
 const TRENDING_API_URL = 'https://zj.v.api.aa1.cn/api/weibo-rs/';
 
 /**
