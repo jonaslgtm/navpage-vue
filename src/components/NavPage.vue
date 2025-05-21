@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, defineAsyncComponent } from 'vue';
 import { fetchNavigationData, fetchTrendingData } from '../api/index.js';
 
 // 网站数据和分类数据
@@ -10,6 +10,10 @@ const trendingItems = ref([]);
 const trendingLoading = ref(true);
 const trendingError = ref(null);
 let trendingInterval = null;
+
+// 使用 Intersection Observer 实现懒加载
+const observer = ref(null);
+const lazyLoadRef = ref(null);
 
 // 封装获取热搜数据的方法
 async function getTrendingData() {
@@ -25,15 +29,41 @@ async function getTrendingData() {
   }
 }
 
-onMounted(() => {
-  fetchData();
-  getTrendingData();
+// 初始化 Intersection Observer
+const initObserver = () => {
+  observer.value = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        getTrendingData();
+        observer.value.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '50px'
+  });
+
+  if (lazyLoadRef.value) {
+    observer.value.observe(lazyLoadRef.value);
+  }
+};
+
+onMounted(async () => {
+  await fetchData();
+  // 立即加载一次热搜数据
+  await getTrendingData();
+  // 初始化观察器
+  initObserver();
+  // 设置定时刷新
   trendingInterval = setInterval(getTrendingData, 10 * 60 * 1000); // 每10分钟刷新一次
 });
 
 onUnmounted(() => {
   if (trendingInterval) {
     clearInterval(trendingInterval);
+  }
+  if (observer.value) {
+    observer.value.disconnect();
   }
 });
 

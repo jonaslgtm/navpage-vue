@@ -2,6 +2,8 @@
 .container {
   max-width: 1200px;
   margin: 0 auto;
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
 
 .header {
@@ -55,6 +57,8 @@
   transition: all 0.3s ease;
   font-size: 14px;
   color: #333;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .category-item:hover {
@@ -74,6 +78,8 @@
   padding: 20px;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 10px;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .grid-item {
@@ -87,6 +93,7 @@
   transition: transform 0.3s, box-shadow 0.3s;
   cursor: pointer;
   text-decoration: none;
+  contain: content;
 }
 
 .grid-item:hover {
@@ -132,6 +139,8 @@
 
 .trending-list {
   list-style-type: none;
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 .trending-list li {
@@ -252,4 +261,26 @@
   .grid-item span {
     font-size: 12px;
   }
+}
+
+/* 添加图片懒加载相关样式 */
+.lazy-image {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.lazy-image.loaded {
+  opacity: 1;
+}
+
+/* 使用 GPU 加速 */
+.trending-list {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+/* 优化滚动性能 */
+.container {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
 }
