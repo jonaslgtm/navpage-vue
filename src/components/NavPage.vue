@@ -55,7 +55,7 @@ onMounted(async () => {
   // 初始化观察器
   initObserver();
   // 设置定时刷新
-  trendingInterval = setInterval(getTrendingData, 30 * 60 * 1000); // 每30分钟刷新一次
+  trendingInterval = setInterval(getTrendingData, 60 * 60 * 1000); // 每60分钟刷新一次
 });
 
 onUnmounted(() => {
