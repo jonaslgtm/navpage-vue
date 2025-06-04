@@ -5,7 +5,7 @@
 
 // API URL配置
 const API_URL = 'https://hao123.web025.cn/api.php';
-const TRENDING_API_URL = 'https://zj.v.api.aa1.cn/api/weibo-rs/';
+const TRENDING_API_URL = 'https://v2.api-m.com/api/weibohot';
 
 /**
  * 获取所有导航数据（网站和分类）
@@ -44,18 +44,37 @@ export async function fetchNavigationData() {
  */
 export async function fetchTrendingData() {
   try {
-    const response = await fetch(TRENDING_API_URL);
+    const response = await fetch(TRENDING_API_URL, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+      }
+    });
+    
     if (!response.ok) {
-      throw new Error('API请求失败');
+      console.error('API响应状态码:', response.status);
+      throw new Error(`API请求失败: ${response.status}`);
     }
+
     const data = await response.json();
+    console.log('热搜API返回数据:', data); // 添加日志便于调试
+
     if (data.code === 1 && data.data && Array.isArray(data.data)) {
       return data.data.slice(0, 10).map(item => ({
         title: item.title,
         hot: item.hot ? item.hot.toString() : '',
         url: `https://s.weibo.com/weibo?q=%23${encodeURIComponent(item.title)}%23&t=31&band_rank=8&Refer=top`
       }));
+    } else if (data.data && Array.isArray(data.data)) {
+      // 如果数据格式略有不同，但仍包含必要字段，也尝试处理
+      return data.data.slice(0, 10).map(item => ({
+        title: item.title || item.name || '',
+        hot: (item.hot || item.value || '').toString(),
+        url: `https://s.weibo.com/weibo?q=%23${encodeURIComponent(item.title || item.name || '')}%23&t=31&band_rank=8&Refer=top`
+      }));
     } else {
+      console.error('API返回数据格式不正确:', data);
       throw new Error('数据格式不正确');
     }
   } catch (error) {
